@@ -2,12 +2,7 @@ import MyButton from "./MyButton";
 import { useNavigate } from "react-router-dom";
 
 const DiaryItem = ({id, emotion, content, date}) => {
-  const paramDate = new Date(parseInt(date))
-  const strDate = paramDate.toLocaleDateString() + " "
-                + paramDate.getHours()+":"
-                + paramDate.getMinutes()+":"
-                + paramDate.getSeconds();
-  
+  const strDate = new Date(parseInt(date)).toLocaleDateString();
   const navigate = useNavigate();
 
   const goDetail = () => {

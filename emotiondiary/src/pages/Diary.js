@@ -30,7 +30,6 @@ const Diary = () => {
     return <div className="DiaryPage">로딩중입니다...</div>
   }else {
     const curEmotionData = emotion.emotionList.find((obj) => (parseInt(obj.emotion_id) === parseInt(data.emotion)))
-    console.log(curEmotionData);
     return (
       <div className="DiaryPage">
         <MyHeader headText={`${utils.getStringDate(new Date(data.date))} 기록`}

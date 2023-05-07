@@ -47,7 +47,6 @@ const DiaryEditor = ({isEdit, originData}) => {
       }
     }
 
-
     useEffect(() => {
       if(isEdit){
         setDate(utils.getStringDate(new Date(parseInt(originData.date))));

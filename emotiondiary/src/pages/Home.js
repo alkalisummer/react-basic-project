@@ -12,6 +12,8 @@ const Home = () => {
   const headText = `${curDate.getFullYear()}년 ${curDate.getMonth() + 1}월`
 
   useEffect(()=>{
+    const titleElment = document.getElementsByTagName('title')[0];
+    titleElment.innerHTML = `Emotion Dairy`;
     if(diaryList.length >= 1){
       const firstDay = new Date(curDate.getFullYear(), curDate.getMonth(),1).getTime();
       const lastDay = new Date(curDate.getFullYear(), curDate.getMonth()+1, 0,23,59,59).getTime();

@@ -12,6 +12,8 @@ const Diary = () => {
   const navigate = useNavigate();
 
   useEffect(()=>{
+    const titleElment = document.getElementsByTagName('title')[0];
+    titleElment.innerHTML = `Emotion Dairy - ${id}번 게시글`;
     if(diaryList.length >= 1){
       const targetDiary = diaryList.find(
         (obj) => parseInt(obj.id) === parseInt(id)

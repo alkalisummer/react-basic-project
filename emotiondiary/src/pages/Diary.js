@@ -34,8 +34,8 @@ const Diary = () => {
     const curEmotionData = emotion.emotionList.find((obj) => (parseInt(obj.emotion_id) === parseInt(data.emotion)))
     return (
       <div className="DiaryPage">
-        <MyHeader headText={`${utils.getStringDate(new Date(data.date))} 기록`}
-                  leftChild={<MyButton text={"< 뒤로가기"} onClick={() => navigate(-1)}/>}
+        <MyHeader headText={`${utils.getStringDate(new Date(data.date))} 게시글`}
+                  leftChild={<MyButton text={"<"} onClick={() => navigate(-1)}/>}
                   rightChild={<MyButton text={"수정"} onClick={() => navigate(`/edit/${data.id}`)}/>}
         />
         <article>

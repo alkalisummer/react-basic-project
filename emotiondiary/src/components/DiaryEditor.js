@@ -57,7 +57,7 @@ const DiaryEditor = ({isEdit, originData}) => {
     return (
       <div className="DiaryEditor">
         <Myheader headText={isEdit ? "게시글 수정" : "게시글 등록"} 
-                  leftChild={<MyButton text={"< 뒤로가기"} onClick={()=>{navigate(-1)}}/>} 
+                  leftChild={<MyButton text={"<"} onClick={()=>{navigate(-1)}}/>} 
                   rightChild={isEdit && (<MyButton text={"삭제"} type={"negative"} onClick={handleRemove} />)}
         />
         <div>

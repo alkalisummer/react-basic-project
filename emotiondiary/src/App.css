@@ -84,7 +84,7 @@ header > div {
 
 header .head_text {
   width: 50%;
-  font-size: 25px;
+  font-size: 20px;
   justify-content: center;
 }
 
@@ -387,3 +387,18 @@ header button {
   font-weight: 400;
   line-height: 2.5;
 }
+
+input, textarea {
+appearance: none;
+-webkit-appearance: none;
+-webkit-border-radius: 0;
+color: black;
+}
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none; 
+  appearance: none;
+  color:black;
+  background:url('../public/assets/arrow-down.png') no-repeat 92% 52%/10px auto;
+  }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import requests from '../api/request';
 import axios from '../api/axios';
 import "./Banner.css"
@@ -39,35 +39,32 @@ function Banner() {
   const [isClicked, setIsClicked] = useState(false);
 
   useEffect(() => {
-    fetchData();  
+      fetchData();
   }, []);
 
   const fetchData = async() => {
-    
-  // 현재 상영중인 영화정보를 가져오기(여러 영화)
-  const request = await axios.get(requests.fetchNowPlaying);   
-  
-  const existVideosData = async()=> {
-    // 여러 영화중 하나의 영화 ID를 가져오기
-    const movieId = request.data.results[
-      Math.floor(Math.random() * request.data.results.length)
-    ].id;
-  
-    // 특정 영화의 상세정보 가져오기(동영상 포함)
-    const {data : movieDetail}= await axios.get(`movie/${movieId}`, {
-      params: {append_to_response : "videos"}
-    });
-    return movieDetail;
-  }
-  let response = await existVideosData();
+    // 현재 상영중인 영화정보를 가져오기(여러 영화)
+    const request = await axios.get(requests.fetchNowPlaying);   
 
-  while(parseInt(response.videos.results.length) > 0){
-    response= await existVideosData();
-  }
-  console.log(response);
-  debugger;
-  setMovie(response);
-  }
+    let videosArr = [];
+    
+    // 특정 영화의 상세정보 가져오기(동영상 포함)
+    do {
+      // 여러 영화중 하나의 영화 ID를 가져오기
+      const movieId = request.data.results[
+        Math.floor(Math.random() * request.data.results.length)
+      ].id;
+
+      const {data : movieDetail} = await axios.get(`movie/${movieId}`, {
+        params: {append_to_response : "videos"}
+      });
+  
+      if(movieDetail.videos.results.length > 0){
+        videosArr.push(movieDetail);
+      }
+    } while (videosArr.length === 0)
+    setMovie(videosArr[0]);
+  };
 
   const truncate = (str, n) => {
     return str?.length > n ? str.substr(0, n-1) + "..." : str  

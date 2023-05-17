@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import requests from '../api/request';
+import requests from '../api/requests';
 import axios from '../api/axios';
 import "./Banner.css"
 import { styled } from 'styled-components';
@@ -85,8 +85,8 @@ function Banner() {
         <div className="banner__contents">
           <h1 className="banner__title">{movie.title || movie.name || movie.original_name}</h1>
           <div className="banner__buttons">
-            <button className="banner__button play" onClick={()=>setIsClicked(true)}>Play</button>    
-            <button className="banner__button info">More Information</button>
+            <button className="banner__button play" onClick={()=>setIsClicked(true)}>▶︎ 재생</button>    
+            <button className="banner__button info">ⓘ 상세 정보</button>
           </div>
           <h1 className="banner__description">{truncate(movie.overview, 100)}</h1>
         </div>

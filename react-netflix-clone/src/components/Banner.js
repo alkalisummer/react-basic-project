@@ -37,6 +37,7 @@ const Iframe = styled.iframe`
 function Banner() {
   const [movie, setMovie] = useState([]);
   const [isClicked, setIsClicked] = useState(false);
+  let videosArr = [];
 
   useEffect(() => {
       fetchData();
@@ -46,24 +47,25 @@ function Banner() {
     // 현재 상영중인 영화정보를 가져오기(여러 영화)
     const request = await axios.get(requests.fetchNowPlaying);   
 
-    let videosArr = [];
-    
-    // 특정 영화의 상세정보 가져오기(동영상 포함)
+   
     do {
       // 여러 영화중 하나의 영화 ID를 가져오기
       const movieId = request.data.results[
         Math.floor(Math.random() * request.data.results.length)
       ].id;
 
+       // 특정 영화의 상세정보 가져오기(동영상 포함)
       const {data : movieDetail} = await axios.get(`movie/${movieId}`, {
         params: {append_to_response : "videos"}
       });
-  
-      if(movieDetail.videos.results.length > 0){
+      
+      // 비디오가 있고 기존 영화정보가 없을때 만 setMovie 
+      if(movieDetail.videos.results.length > 0 && videosArr.length === 0){
         videosArr.push(movieDetail);
+        setMovie(videosArr[0]);
       }
     } while (videosArr.length === 0)
-    setMovie(videosArr[0]);
+    
   };
 
   const truncate = (str, n) => {

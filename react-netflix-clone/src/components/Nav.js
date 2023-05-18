@@ -31,8 +31,6 @@ function Nav() {
         src={process.env.PUBLIC_URL + '/assets/netflix_profile_icon.png'}
         className="nav__avatar"
       />
-        
-      
     </nav>
   )
 }

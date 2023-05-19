@@ -11,8 +11,8 @@ function App() {
       <Nav />
       <Banner />
       <Row
-        title="오직 넷플릭스에서"
-        id="NO"
+        title="TV 프로그램"
+        id="TV"
         fetchUrl={requests.fetchNetfilxOriginals}
         isLargeRow 
       />

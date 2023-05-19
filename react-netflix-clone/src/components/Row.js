@@ -19,9 +19,10 @@ function Row({ isLargeRow, title, id, fetchUrl }) {
       setMovies(request.data.results);
   };
 
-  const handleClick = (movie) => {
+  const handleClick = async (movie) => {
+    const movieDetails = await axios.get(id === 'TV' ? 'tv/'+movie.id : 'movie/'+movie.id);
     setModalOpen(true); 
-    setMovieSelected(movie);
+    setMovieSelected(movieDetails.data);
   };
 
   return (
@@ -53,7 +54,7 @@ function Row({ isLargeRow, title, id, fetchUrl }) {
         </div>
       </div>
       {
-        modalOpen && <MovieModal {...movieSelected} setModalOpen={setModalOpen}/>
+        modalOpen && <MovieModal {...movieSelected} setModalOpen={setModalOpen} categoryId={id}/>
       }
     </section>
   )

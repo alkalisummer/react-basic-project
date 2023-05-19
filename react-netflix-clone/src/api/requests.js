@@ -1,6 +1,6 @@
 const requests = {
     fetchNowPlaying : "movie/now_playing",
-    fetchNetfilxOriginals: "/discover/tv?with_nexworks=213",
+    fetchNetfilxOriginals: "/discover/tv?with_original_language=ko",
     fetchTrending: "/trending/all/week",
     fetchTopRated: "/movie/top_rated",
     fetchActionMovies: "/discover/movie?with_genres=28",

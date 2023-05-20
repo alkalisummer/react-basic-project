@@ -31,14 +31,14 @@
     font-size: 18px;
   }
   .modal__overview {
-    font-size: 20px;
+    font-size: 16px;
     line-height: 1.5;
   }
 
   .modal__score {
     font-weight: 600;
     font-size: 20px;
-    
+
     padding-top: 20px;
     padding-bottom: 20px;
   }

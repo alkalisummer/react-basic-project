@@ -1,7 +1,8 @@
 import React, { useState, useEffect} from 'react';
 import { useLocation } from 'react-router-dom';
+import { useDebounce } from '../../hooks/useDebounce';
 import axios from '../../api/axios';
-import "./SearchPage.css";
+import "./SearchPage.css"; 
 
 function SearchPage () {
   const [searchResults, setSearchResults] = useState([]);
@@ -11,11 +12,15 @@ function SearchPage () {
   let query = useQuery();
   const searchTerm = query.get("q");
 
+  //한 자씩 타이핑할때마다 api를 호출하는 것을 방지하기 위해 delay 설정
+  //설정한 delay 후 검색어 값이 바뀌면 api 호출
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
   useEffect(()=>{
-    if(searchTerm) {
-        fetchSearchMovie(searchTerm);
+    if(debouncedSearchTerm) {
+        fetchSearchMovie(debouncedSearchTerm);
     }
-  }, [searchTerm])
+  }, [debouncedSearchTerm])
   
   const fetchSearchMovie = async (searchTerm) => {
     try{
@@ -33,7 +38,7 @@ function SearchPage () {
           if(obj.backdrop_path !== null && obj.media_type !== 'person'){
             const movieImageUrl = 'https://image.tmdb.org/t/p/w500' + obj.backdrop_path
             return (
-              <div className='movie'>
+              <div className='movie' key={obj.id}>
                 <div className='movie__column-poster'>
                   <img src={movieImageUrl} alt='movie' className='movie__poster'/>
                 </div>
@@ -46,7 +51,7 @@ function SearchPage () {
     ) : <section className='no-results'>
           <div className='no-results_text'>
             <p>
-              찾고자하는 검색어 "{searchTerm}" 에 맞는 영화가 없습니다.
+              찾고자하는 검색어 "{debouncedSearchTerm}" 에 맞는 영화가 없습니다.
             </p>
           </div>       
         </section>

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import requests from '../api/requests';
 import axios from '../api/axios';
 import { CommonStateContext } from '../App';
+import MovieModal from './MovieModal/index';
 import "./Banner.css"
 import { styled } from 'styled-components';
 
@@ -37,7 +38,8 @@ const Iframe = styled.iframe`
 
 function Banner() {
   const [movie, setMovie] = useState([]);
-  //const [isClicked, setIsClicked] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [movieSelected, setMovieSelected] = useState({});
   const { isClicked, setIsClicked } = useContext(CommonStateContext);
   let videosArr = [];
 
@@ -70,6 +72,13 @@ function Banner() {
     
   };
 
+  const handleClick = async (movie) => {
+    const movieDetails = await axios.get('movie/'+movie.id);
+    
+    setModalOpen(true); 
+    setMovieSelected(movieDetails.data);
+  };
+
   const truncate = (str, n) => {
     return str?.length > n ? str.substr(0, n-1) + "..." : str  
   } 
@@ -89,10 +98,13 @@ function Banner() {
           <h1 className="banner__description">{truncate(movie.overview, 100)}</h1>
           <div className="banner__buttons">
             <button className="banner__button play" onClick={()=>setIsClicked(true)}>▶︎ 재생</button>    
-            <button className="banner__button info" >ⓘ 상세 정보</button>
+            <button className="banner__button info" onClick={()=>handleClick(movie)} >ⓘ 상세 정보</button>
           </div>
         </div>
         <div className="banner--fadeBottom"></div>
+        {
+          modalOpen && <MovieModal {...movieSelected} setModalOpen={setModalOpen}/>
+        }
       </header>
     )
   } else {
@@ -109,7 +121,6 @@ function Banner() {
             >
           </Iframe>
         </HomeContainer>
-        
       </Container>
     )
   }

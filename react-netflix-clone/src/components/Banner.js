@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import requests from '../api/requests';
 import axios from '../api/axios';
+import { CommonStateContext } from '../App';
 import "./Banner.css"
 import { styled } from 'styled-components';
 
@@ -10,7 +11,7 @@ const Container = styled.div`
   align-items: center;
   flex-direction: column;
   width: 100%;
-  height: 100vh;
+  height: 448px;
 `;
 const HomeContainer = styled.div`
   width: 100%;
@@ -36,7 +37,8 @@ const Iframe = styled.iframe`
 
 function Banner() {
   const [movie, setMovie] = useState([]);
-  const [isClicked, setIsClicked] = useState(false);
+  //const [isClicked, setIsClicked] = useState(false);
+  const { isClicked, setIsClicked } = useContext(CommonStateContext);
   let videosArr = [];
 
   useEffect(() => {
@@ -84,11 +86,11 @@ function Banner() {
       >
         <div className="banner__contents">
           <h1 className="banner__title">{movie.title || movie.name || movie.original_name}</h1>
+          <h1 className="banner__description">{truncate(movie.overview, 100)}</h1>
           <div className="banner__buttons">
             <button className="banner__button play" onClick={()=>setIsClicked(true)}>▶︎ 재생</button>    
-            <button className="banner__button info">ⓘ 상세 정보</button>
+            <button className="banner__button info" >ⓘ 상세 정보</button>
           </div>
-          <h1 className="banner__description">{truncate(movie.overview, 100)}</h1>
         </div>
         <div className="banner--fadeBottom"></div>
       </header>

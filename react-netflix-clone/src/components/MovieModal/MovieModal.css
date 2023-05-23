@@ -16,6 +16,7 @@
   .modal__content {
     padding: 40px;
     color: white;
+    text-align: left;
   }
   .modal__title {
     padding: 0;

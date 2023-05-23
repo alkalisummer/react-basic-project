@@ -17,11 +17,14 @@
 }
 
 .nav__logo {
-  position: fixed;
   left: 40px;
   width: 80px;
   object-fit: contain;
   cursor: pointer;
+}
+
+.nav__right {
+  height: 100%;
 }
 
 .nav__avatar{
@@ -32,8 +35,7 @@
 }
 
 .nav__input {
-  position: fixed;
-  left: 90%;
+  margin-right: 30px;
   transform: translate(-50%, 0);
   background-color: rgba(0, 0, 0, 0.582);
   color: white;

@@ -12,7 +12,7 @@ const Container = styled.div`
   align-items: center;
   flex-direction: column;
   width: 100%;
-  height: 448px;
+  height: 600px;
 `;
 const HomeContainer = styled.div`
   width: 100%;
@@ -65,6 +65,12 @@ function Banner() {
       
       // 비디오가 있고 기존 영화정보가 없을때 만 setMovie 
       if(movieDetail.videos.results.length > 0 && videosArr.length === 0){
+        movieDetail.officialVideos = [];
+        for (let obj of movieDetail.videos.results){
+          if(obj.type === 'Teaser' || obj.type === 'Trailer' ){
+            movieDetail.officialVideos.push(obj);
+          }
+        }
         videosArr.push(movieDetail);
         setMovie(videosArr[0]);
       }
@@ -74,7 +80,6 @@ function Banner() {
 
   const handleClick = async (movie) => {
     const movieDetails = await axios.get('movie/'+movie.id);
-    
     setModalOpen(true); 
     setMovieSelected(movieDetails.data);
   };
@@ -114,7 +119,7 @@ function Banner() {
           <Iframe 
             width="640" 
             height="360" 
-            src={`https://www.youtube.com/embed/${movie.videos.results[0].key}?controls=0&autoplay=1&loop=1&mute=1&playlist=${movie.videos.results[0].key}`}
+            src={`https://www.youtube.com/embed/${movie.officialVideos[0].key}?controls=0&autoplay=1&loop=1&mute=1&playlist=${movie.officialVideos[0].key}`}
             title="YouTube video player"
             frameBorder="0"
             allow="autoplay; fullscreen;"

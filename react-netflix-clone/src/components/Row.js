@@ -6,13 +6,27 @@ import MovieModal from './MovieModal/index';
 function Row({ isLargeRow, title, id, fetchUrl }) {
   
   const [movies, setMovies] = useState([]);
+  const [movie, setMovie] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
   const [movieSelected, setMovieSelected] = useState({});
   
   useEffect(()=>{
     fetchMovieData();  
-
   }, []);
+
+  // 포스터에 onmouse 이벤트 무분별한 api 호출을 방지 
+  useEffect(()=>{
+    if(movie && Object.keys(movie).length !== 0){
+      const handler = setTimeout(()=>{
+        handleMouseOver(movie);    
+      }, 1000); 
+
+      return () => {
+        // delay로 정해둔 시간안에 새로운 value가 들어오면 기존 handler의 delay 초기화
+        clearTimeout(handler);
+      }
+    }
+  }, [movie]);
 
   const fetchMovieData = async () => {
       const request = await axios.get(fetchUrl);
@@ -24,6 +38,13 @@ function Row({ isLargeRow, title, id, fetchUrl }) {
     setModalOpen(true); 
     setMovieSelected(movieDetails.data);
   };
+
+  const handleMouseOver = async (movie) => {
+    const movieDetails = await axios.get(id === 'TV' ? 'tv/'+movie.id : 'movie/'+movie.id);
+    console.log(movieDetails);
+  }
+
+  
 
   return (
     <section className="row">
@@ -43,6 +64,7 @@ function Row({ isLargeRow, title, id, fetchUrl }) {
               src={`https://image.tmdb.org/t/p/original/${isLargeRow ? obj.poster_path : obj.backdrop_path}`}
               alt={obj.name}
               onClick={()=> handleClick(obj)}
+              onMouseOver={() => setMovie(obj)}
             />
           ))}
         </div>

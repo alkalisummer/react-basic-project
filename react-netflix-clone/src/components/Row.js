@@ -18,8 +18,16 @@ function Row({ isLargeRow, title, id, fetchUrl }) {
   }, []);
 
   useEffect(()=>{
-    setMiniModalOpen(miniModalOpenTrigger);    
-  }, [miniModalOpenTrigger])
+    const handler = setTimeout(()=>{
+      console.log("모달오픈트리거: "+ miniModalOpenTrigger)
+      setMiniModalOpen(miniModalOpenTrigger);
+    }, 1000);
+
+    return () => {
+      console.log("언마운트")
+      clearTimeout(handler);
+    }
+  }, [miniModalOpenTrigger, miniModalMovieId])
 
   const fetchMovieData = async () => {
       const request = await axios.get(fetchUrl);
@@ -32,11 +40,16 @@ function Row({ isLargeRow, title, id, fetchUrl }) {
     setMovieSelected(movieDetails.data);
   };
 
-  const handleMouseOver = (movie) => {
-    setMiniModalMovieId(movie.id);
-    setMiniModalOpenTrigger(true);
-    
+  const handleMouseOver = (movie, overYn) => {
+      setMiniModalMovieId(movie.id);
+      setMiniModalOpenTrigger(overYn);
   };
+
+  const handleMouseOut = (movie, overYn) => {
+    if(!miniModalOpen){
+      setMiniModalOpenTrigger(overYn);
+    }
+  }
 
   return (
     <section className="row">
@@ -56,7 +69,8 @@ function Row({ isLargeRow, title, id, fetchUrl }) {
               src={`https://image.tmdb.org/t/p/original/${isLargeRow ? obj.poster_path : obj.backdrop_path}`}
               alt={obj.name}
               onClick={()=> handleClick(obj)}
-              onMouseOver={() => handleMouseOver(obj)}
+              onMouseOver={() => handleMouseOver(obj, true)}
+              onMouseOut={() => handleMouseOut(obj, false)}
             />
           ))}
         </div>
@@ -71,7 +85,7 @@ function Row({ isLargeRow, title, id, fetchUrl }) {
         modalOpen && <MovieModal {...movieSelected} setModalOpen={setModalOpen} categoryId={id}/>
       }
       {
-        miniModalOpen && <MiniModal movieId={miniModalMovieId} setMiniModalOpen={setMiniModalOpen} categoryId={id} setMiniModalOpenTrigger={setMiniModalOpenTrigger} />
+        miniModalOpen && <MiniModal movieId={miniModalMovieId} setMiniModalOpen={setMiniModalOpen} categoryId={id} miniModalOpenTrigger={miniModalOpenTrigger} />
       }
 
     </section>

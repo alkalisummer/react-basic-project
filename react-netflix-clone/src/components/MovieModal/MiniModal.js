@@ -9,7 +9,7 @@ const runtimeFunc = (time) => {
   return result;
 }
 
-function MiniModal({ movieId, categoryId, setMiniModalOpen, setMiniModalOpenTrigger }) {
+function MiniModal({ movieId, categoryId, setMiniModalOpen }) {
   const [movie, setMovie] = useState({});
 
   useEffect(()=>{
@@ -38,7 +38,6 @@ function MiniModal({ movieId, categoryId, setMiniModalOpen, setMiniModalOpenTrig
         <div className='wrapper-modal'>
           <div className='modal'>
             <span onClick={()=> {setMiniModalOpen(false);
-                                setMiniModalOpenTrigger(false);
                                  }} className='modal-close'>
               ✕
             </span>

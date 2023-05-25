@@ -2,7 +2,7 @@ import React, { useState, useEffect} from 'react';
 import { useLocation } from 'react-router-dom';
 import { useDebounce } from '../../hooks/useDebounce';
 import axios from '../../api/axios';
-import MovieModal from '../../components/MovieModal/index';
+import MovieModal from '../../components/MovieModal/MovieModal';
 import "./SearchPage.css"; 
 
 function SearchPage () {

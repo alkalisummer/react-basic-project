@@ -1,32 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import axios from '../api/axios';
 import "./Row.css";
-import MovieModal from './MovieModal/index';
+import MovieModal from './MovieModal/MovieModal';
+import MiniModal from './MovieModal/MiniModal';
 
 function Row({ isLargeRow, title, id, fetchUrl }) {
   
   const [movies, setMovies] = useState([]);
-  const [movie, setMovie] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
+  const [miniModalOpen, setMiniModalOpen] = useState(false);
+  const [miniModalOpenTrigger, setMiniModalOpenTrigger] = useState(false);
   const [movieSelected, setMovieSelected] = useState({});
+  const [miniModalMovieId, setMiniModalMovieId] = useState("");
   
   useEffect(()=>{
-    fetchMovieData();  
+    fetchMovieData();
   }, []);
 
-  // 포스터에 onmouse 이벤트 무분별한 api 호출을 방지 
   useEffect(()=>{
-    if(movie && Object.keys(movie).length !== 0){
-      const handler = setTimeout(()=>{
-        handleMouseOver(movie);    
-      }, 1000); 
-
-      return () => {
-        // delay로 정해둔 시간안에 새로운 value가 들어오면 기존 handler의 delay 초기화
-        clearTimeout(handler);
-      }
-    }
-  }, [movie]);
+    setMiniModalOpen(miniModalOpenTrigger);    
+  }, [miniModalOpenTrigger])
 
   const fetchMovieData = async () => {
       const request = await axios.get(fetchUrl);
@@ -39,12 +32,11 @@ function Row({ isLargeRow, title, id, fetchUrl }) {
     setMovieSelected(movieDetails.data);
   };
 
-  const handleMouseOver = async (movie) => {
-    const movieDetails = await axios.get(id === 'TV' ? 'tv/'+movie.id : 'movie/'+movie.id);
-    console.log(movieDetails);
-  }
-
-  
+  const handleMouseOver = (movie) => {
+    setMiniModalMovieId(movie.id);
+    setMiniModalOpenTrigger(true);
+    
+  };
 
   return (
     <section className="row">
@@ -64,7 +56,7 @@ function Row({ isLargeRow, title, id, fetchUrl }) {
               src={`https://image.tmdb.org/t/p/original/${isLargeRow ? obj.poster_path : obj.backdrop_path}`}
               alt={obj.name}
               onClick={()=> handleClick(obj)}
-              onMouseOver={() => setMovie(obj)}
+              onMouseOver={() => handleMouseOver(obj)}
             />
           ))}
         </div>
@@ -78,8 +70,12 @@ function Row({ isLargeRow, title, id, fetchUrl }) {
       {
         modalOpen && <MovieModal {...movieSelected} setModalOpen={setModalOpen} categoryId={id}/>
       }
+      {
+        miniModalOpen && <MiniModal movieId={miniModalMovieId} setMiniModalOpen={setMiniModalOpen} categoryId={id} setMiniModalOpenTrigger={setMiniModalOpenTrigger} />
+      }
+
     </section>
   )
 }
 
-export default Row;
+export default React.memo(Row);

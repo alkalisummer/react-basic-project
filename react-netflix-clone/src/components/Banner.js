@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import requests from '../api/requests';
 import axios from '../api/axios';
 import { CommonStateContext } from '../App';
-import MovieModal from './MovieModal/index';
+import MovieModal from './MovieModal/MovieModal';
 import "./Banner.css"
 import { styled } from 'styled-components';
 

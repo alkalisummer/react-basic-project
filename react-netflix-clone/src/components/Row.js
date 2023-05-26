@@ -14,6 +14,7 @@ function Row({ isLargeRow, title, id, fetchUrl }) {
   const [miniModalMovieId, setMiniModalMovieId] = useState("");
   const [modalTop, setModalTop] = useState(0);
   const [modalLeft, setModalLeft] = useState(0);
+  const [slideCount, setSlideCount] = useState(0);
 
   useEffect(()=>{
     fetchMovieData();
@@ -45,8 +46,8 @@ function Row({ isLargeRow, title, id, fetchUrl }) {
   const handleMouseOver = (movie, overYn, event) => {
       setMiniModalMovieId(movie.id);
       setMiniModalOpenTrigger(overYn);
-      setModalTop(event.target.offsetTop);
-      setModalLeft(event.target.offsetLeft);
+      setModalTop(event.currentTarget.offsetTop);
+      setModalLeft(event.currentTarget.offsetLeft - document.getElementById(id).scrollLeft);
   };
 
   const handleMouseOut = (overYn) => {

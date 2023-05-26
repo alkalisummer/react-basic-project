@@ -32,7 +32,6 @@ function MiniModal({ movieId, categoryId, setMiniModalOpen, setMiniModalMovieId,
     const movieDetails = await axios.get(categoryId === 'TV' ? 'tv/'+movieId : 'movie/'+movieId, {
       params: {append_to_response : "videos"}
     });
-    console.log(movieDetails)
     setMovie(movieDetails.data);
   };
 

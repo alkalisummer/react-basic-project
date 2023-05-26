@@ -21,7 +21,9 @@ function Row({ isLargeRow, title, id, fetchUrl }) {
 
   useEffect(()=>{
     const handler = setTimeout(()=>{
-      setMiniModalOpen(miniModalOpenTrigger);
+      if(miniModalMovieId){
+        setMiniModalOpen(miniModalOpenTrigger);
+      }
     }, 1000);
 
     return () => {
@@ -73,14 +75,14 @@ function Row({ isLargeRow, title, id, fetchUrl }) {
               alt={obj.name}
               onClick={()=> handleClick(obj)}
               onMouseOver={(e) => handleMouseOver(obj, true, e)}
-              onMouseOut={() => handleMouseOut(false)}
+              onMouseLeave={() => handleMouseOut(false)}
             />
           ))}
           {
             miniModalOpen && <MiniModal movieId={miniModalMovieId} 
                                         setMiniModalOpen={setMiniModalOpen} 
+                                        setMiniModalMovieId={setMiniModalMovieId} 
                                         categoryId={id} 
-                                        miniModalOpenTrigger={miniModalOpenTrigger} 
                                         modalTop={modalTop}
                                         modalLeft={modalLeft}
                                         />

@@ -9,7 +9,7 @@ const runtimeFunc = (time) => {
   return result;
 }
 
-function MiniModal({ movieId, categoryId, setMiniModalOpen, modalTop, modalLeft }) {
+function MiniModal({ movieId, categoryId, setMiniModalOpen, setMiniModalMovieId, modalTop, modalLeft}) {
   const [movie, setMovie] = useState({});
   const miniModalStyle = {
     top : modalTop,
@@ -27,7 +27,7 @@ function MiniModal({ movieId, categoryId, setMiniModalOpen, modalTop, modalLeft 
     }
 
   },[movieId]);
-  
+
   const fetchMovieData = async (movieId) => {
     const movieDetails = await axios.get(categoryId === 'TV' ? 'tv/'+movieId : 'movie/'+movieId, {
       params: {append_to_response : "videos"}
@@ -36,11 +36,15 @@ function MiniModal({ movieId, categoryId, setMiniModalOpen, modalTop, modalLeft 
     setMovie(movieDetails.data);
   };
 
-
+  const handleMouseOut = (outYn) => {
+    setMiniModalOpen(outYn);
+    setMiniModalMovieId("");
+  }
+  
   const renderSearchResult = () => {
     return Object.keys(movie).length > 0 ? (
       <div className='presentation-mini' style={miniModalStyle}>
-        <div className='wrapper-mini-modal'>
+        <div className='wrapper-mini-modal' onMouseLeave={() => handleMouseOut(false)}>
           <div className='mini__modal'>
             <span onClick={()=> {setMiniModalOpen(false);
                                  }} className='mini__modal-close'>
@@ -63,14 +67,15 @@ function MiniModal({ movieId, categoryId, setMiniModalOpen, modalTop, modalLeft 
                   {categoryId === "TV" ? "시즌" +movie.number_of_seasons + " 에피소드 " +  movie.number_of_episodes + "개" : runtimeFunc(movie.runtime)}
                 </span>
               </p>
-              <h2 className='mini__modal__title'>{movie.title? movie.title: movie.name}</h2>
+              <div className='mini__modal_title_score'>
+                <span className='mini__modal__title'>{movie.title? movie.title: movie.name}</span>
+                <span className='mini__modal__score'><span className='mini__modal__score-star'>★</span> {movie.vote_average.toFixed(2)}</span>
+              </div>
               {movie.genres.map((obj, idx)=>(
                 <span key={obj.id} className='mini__modal__genre'>
                   {obj.name + (idx === (movie.genres.length-1) ? " " : " • ")}
                 </span>
               ))}
-              <p className='mini__modal__score'><span className='mini__modal__score-star'>★</span> {movie.vote_average.toFixed(2)}</p>
-              <p className='mini__modal__overview'>{movie.overview ? movie.overview : "등록된 요약이 없습니다."}</p>
               
             </div>
           </div>  

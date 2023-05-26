@@ -1,4 +1,4 @@
-.modal {
+.mini__modal {
     position: relative;
     max-width: 800px;
     box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
@@ -9,73 +9,80 @@
     transition: all 400ms ease-in-out 2s;
     animation: fadeIn 400ms;
   }
-  .modal__poster-img {
+  .mini__modal__poster-img {
     width: 100%;
     height: auto;
   }
-  .modal__content {
+  .mini__modal__content {
     padding: 40px;
     color: white;
     text-align: left;
   }
-  .modal__title {
+  .mini__modal__title {
     padding: 0;
     font-size: 40px;
     margin: 16px 0;
   }
-  .modal__details {
+  .mini__modal__details {
     font-weight: 600;
     font-size: 18px;
   }
-  .modal__genre {
+  .mini__modal__genre {
     font-weight: 600;
     font-size: 18px;
   }
-  .modal__overview {
+  .mini__modal__overview {
     font-size: 16px;
     line-height: 1.5;
   }
 
-  .modal__score {
+  .mini__modal__score {
     font-weight: 600;
     font-size: 20px;
 
     padding-top: 20px;
     padding-bottom: 20px;
   }
-  .modal__score-star{
+  .mini__modal__score-star{
     color: orange;
   }
-  .modal__user-perc {
+  .mini__modal__user-perc {
     color: #46d369;
     margin-right: 10px;
   }
-  .modal__release-date {
+  .mini__modal__release-date {
     margin-right: 10px;
   }
-  .modal::-webkit-scrollbar {
+  .mini__modal::-webkit-scrollbar {
     display: none;
     visibility: hidden;
   }
   
   /* Hide scrollbar for IE, Edge and Firefox */
-  .modal {
+  .mini__modal {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
   }
-  .wrapper-modal {
+  .wrapper-mini-modal {
     position: fixed;
     inset: 0px;
     background-color: rgb(0 0 0 / 71%);
     -webkit-tap-highlight-color: transparent;
     display: flex;
     justify-content: center;
+    
+    width: 400px;
+    height: 430px;
+    border-radius: 8px;
   }
-  .presentation {
+  .presentation-mini {
     z-index: 1200;
     position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
-  .modal-close {
+  .mini__modal-close {
     position: absolute;
     right: 20px;
     top: 20px;
@@ -84,25 +91,25 @@
     color: white;
   }
   @media screen and (max-height: 768px) {
-    .wrapper-modal {
+    .wrapper-mini-modal {
       align-items: unset;
       padding-top: 2rem;
     }
-    .modal {
+    .mini__modal {
       overflow-y: scroll;
     }
   }
   @media screen and (max-width: 768px) {
-    .modal__overview {
+    .mini__modal__overview {
       font-size: 16px;
     }
-    .modal__details {
+    .mini__modal__details {
       font-size: 16px;
     }
     .wrapper-modal {
       padding: 0;
     }
-    .modal {
+    .mini__modal {
       overflow-y: scroll !important;
     }
   }

@@ -12,19 +12,19 @@ function Row({ isLargeRow, title, id, fetchUrl }) {
   const [miniModalOpenTrigger, setMiniModalOpenTrigger] = useState(false);
   const [movieSelected, setMovieSelected] = useState({});
   const [miniModalMovieId, setMiniModalMovieId] = useState("");
-  
+  const [modalTop, setModalTop] = useState(0);
+  const [modalLeft, setModalLeft] = useState(0);
+
   useEffect(()=>{
     fetchMovieData();
   }, []);
 
   useEffect(()=>{
     const handler = setTimeout(()=>{
-      console.log("모달오픈트리거: "+ miniModalOpenTrigger)
       setMiniModalOpen(miniModalOpenTrigger);
     }, 1000);
 
     return () => {
-      console.log("언마운트")
       clearTimeout(handler);
     }
   }, [miniModalOpenTrigger, miniModalMovieId])
@@ -40,12 +40,14 @@ function Row({ isLargeRow, title, id, fetchUrl }) {
     setMovieSelected(movieDetails.data);
   };
 
-  const handleMouseOver = (movie, overYn) => {
+  const handleMouseOver = (movie, overYn, event) => {
       setMiniModalMovieId(movie.id);
       setMiniModalOpenTrigger(overYn);
+      setModalTop(event.target.offsetTop);
+      setModalLeft(event.target.offsetLeft);
   };
 
-  const handleMouseOut = (movie, overYn) => {
+  const handleMouseOut = (overYn) => {
     if(!miniModalOpen){
       setMiniModalOpenTrigger(overYn);
     }
@@ -65,14 +67,24 @@ function Row({ isLargeRow, title, id, fetchUrl }) {
           {movies.map(obj=>(
             <img 
               key = {obj.id}
+              id = {obj.id}
               className={`row__poster ${isLargeRow && "row__posterLarge"}`}
               src={`https://image.tmdb.org/t/p/original/${isLargeRow ? obj.poster_path : obj.backdrop_path}`}
               alt={obj.name}
               onClick={()=> handleClick(obj)}
-              onMouseOver={() => handleMouseOver(obj, true)}
-              onMouseOut={() => handleMouseOut(obj, false)}
+              onMouseOver={(e) => handleMouseOver(obj, true, e)}
+              onMouseOut={() => handleMouseOut(false)}
             />
           ))}
+          {
+            miniModalOpen && <MiniModal movieId={miniModalMovieId} 
+                                        setMiniModalOpen={setMiniModalOpen} 
+                                        categoryId={id} 
+                                        miniModalOpenTrigger={miniModalOpenTrigger} 
+                                        modalTop={modalTop}
+                                        modalLeft={modalLeft}
+                                        />
+          }
         </div>
         <div className="slider__arrow-right" 
              onClick={() => {
@@ -83,9 +95,6 @@ function Row({ isLargeRow, title, id, fetchUrl }) {
       </div>
       {
         modalOpen && <MovieModal {...movieSelected} setModalOpen={setModalOpen} categoryId={id}/>
-      }
-      {
-        miniModalOpen && <MiniModal movieId={miniModalMovieId} setMiniModalOpen={setMiniModalOpen} categoryId={id} miniModalOpenTrigger={miniModalOpenTrigger} />
       }
 
     </section>

@@ -14,7 +14,6 @@ function Row({ isLargeRow, title, id, fetchUrl }) {
   const [miniModalMovieId, setMiniModalMovieId] = useState("");
   const [modalTop, setModalTop] = useState(0);
   const [modalLeft, setModalLeft] = useState(0);
-  const [slideCount, setSlideCount] = useState(0);
 
   useEffect(()=>{
     fetchMovieData();

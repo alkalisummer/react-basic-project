@@ -66,10 +66,12 @@ function MiniModal({ movieId, categoryId, setMiniModalOpen, setMiniModalMovieId,
                   {categoryId === "TV" ? "시즌" +movie.number_of_seasons + " 에피소드 " +  movie.number_of_episodes + "개" : runtimeFunc(movie.runtime)}
                 </span>
               </p>
-              <div className='mini__modal_title_score'>
+              <div className='mini__modal_title_div'>
                 <span className='mini__modal__title'>{movie.title? movie.title: movie.name}</span>
-                <span className='mini__modal__score'><span className='mini__modal__score-star'>★</span> {movie.vote_average.toFixed(2)}</span>
               </div>
+              {/* <div className='mini__modal_score_div'>
+                <span className='mini__modal__score'><span className='mini__modal__score-star'>★</span> {movie.vote_average.toFixed(2)}</span>
+              </div> */}
               {movie.genres.map((obj, idx)=>(
                 <span key={obj.id} className='mini__modal__genre'>
                   {obj.name + (idx === (movie.genres.length-1) ? " " : " • ")}

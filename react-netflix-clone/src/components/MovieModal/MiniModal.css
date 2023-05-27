@@ -21,7 +21,6 @@
   
   .mini__modal__details {
     font-weight: 600;
-    font-size: 18px;
   }
   .mini__modal__genre {
     font-weight: 600;
@@ -32,18 +31,26 @@
     line-height: 1.5;
   }
 
-  .mini__modal_title_score {
-    padding-bottom: 20px;
-    padding-top: 20px;
+  .mini__modal_title_div {
+    padding-bottom: 15px;
+    padding-top: 15px;
   }
+
+  .mini__modal_score_div {
+    padding-bottom: 15px;
+  }
+
   .mini__modal__score {
     font-weight: 600;
     font-size: 15px;
   }
   .mini__modal__title {
-    padding: 0;
-    font-size: 30px;
-    margin-right: 15px;
+    font-size: 25px;
+    font-weight: bolder;
+    
+    position: absolute;
+    top: 186px;
+    left: 15px;
   }
 
   .mini__modal__score-star{
@@ -80,7 +87,7 @@
     justify-content: center;
     
     width: 400px;
-    height: 420px;
+    height: 350px;
     border-radius: 8px;
   }
   .presentation-mini {

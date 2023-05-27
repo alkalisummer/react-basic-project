@@ -9,7 +9,7 @@ const runtimeFunc = (time) => {
   return result;
 }
 
-function MiniModal({ movieId, categoryId, setMiniModalOpen, setMiniModalMovieId, modalTop, modalLeft}) {
+function MiniModal({ movieId, categoryId, setMiniModalOpen, setModalOpen, setMiniModalMovieId, modalTop, modalLeft}) {
   const [movie, setMovie] = useState({});
   const miniModalStyle = {
     top : modalTop,
@@ -39,6 +39,11 @@ function MiniModal({ movieId, categoryId, setMiniModalOpen, setMiniModalMovieId,
     setMiniModalOpen(outYn);
     setMiniModalMovieId("");
   }
+
+  const handleBigModal = () => {
+    setMiniModalOpen(false);
+    setModalOpen(movie);
+  }
   
   const renderSearchResult = () => {
     return Object.keys(movie).length > 0 ? (
@@ -65,6 +70,7 @@ function MiniModal({ movieId, categoryId, setMiniModalOpen, setMiniModalMovieId,
                 <span className='mini__modal__episode-num'>
                   {categoryId === "TV" ? "시즌" +movie.number_of_seasons + " 에피소드 " +  movie.number_of_episodes + "개" : runtimeFunc(movie.runtime)}
                 </span>
+                <span className='mini__modal_dtl_btn' onClick={() => handleBigModal()}>▽</span>
               </p>
               <div className='mini__modal_title_div'>
                 <span className='mini__modal__title'>{movie.title? movie.title: movie.name}</span>

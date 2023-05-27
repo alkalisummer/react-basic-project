@@ -82,6 +82,7 @@ function Row({ isLargeRow, title, id, fetchUrl }) {
             miniModalOpen && <MiniModal movieId={miniModalMovieId} 
                                         setMiniModalOpen={setMiniModalOpen} 
                                         setMiniModalMovieId={setMiniModalMovieId} 
+                                        setModalOpen={handleClick}
                                         categoryId={id} 
                                         modalTop={modalTop}
                                         modalLeft={modalLeft}

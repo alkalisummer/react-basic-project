@@ -68,6 +68,23 @@
   .mini__modal__episode-num {
     font-size: 15px;
   }
+
+  .mini__modal_dtl_btn {
+    float: right;
+    cursor: pointer;
+    font-size: 20px;
+  }
+
+  .mini__modal_dtl_btn:hover {
+    font-size: 0;
+  }
+
+  .mini__modal_dtl_btn:hover:before{
+    content : '▼';
+    font-size : 20px;
+  }
+
+
   .mini__modal::-webkit-scrollbar {
     display: none;
     visibility: hidden;

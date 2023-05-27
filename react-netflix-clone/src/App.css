@@ -1,8 +1,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap");
+@font-face {
+  font-family: 'NetflixSans_W_Bd';
+  src : url('../public/fonts/NetflixSans_W_Bd.woff2') format(woff2)
+}
 
+@font-face {
+  font-family: 'NetflixSans_W_Lt';
+  src : url('../public/fonts/NetflixSans_W_Lt.woff2') format(woff2)
+}
  * {
     margin: 0;
-    font-family: "Nanum Gothic", sans-serif;
+    font-family: "Nanum NetflixSans_W_Bd", sans-serif;
   }
   .app {
     background: #111;

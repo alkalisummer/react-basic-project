@@ -1,5 +1,35 @@
 import React from 'react'
 import "./MovieModal.css";
+import { styled } from 'styled-components';
+
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: 450px;
+`;
+const HomeContainer = styled.div`
+  width: 100%;
+  height: 100%;
+`;
+
+const Iframe = styled.iframe`
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  border: none;
+
+  &::after {
+    content:"";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+`;
 
 const runtimeFunc = (time) => {
   let hour = parseInt(time/60);
@@ -22,6 +52,7 @@ function MovieModal({
   runtime,
   popularity,
   genres,
+  officialVideos,
   setModalOpen
 }) {
     
@@ -32,11 +63,24 @@ function MovieModal({
           <span onClick={()=> setModalOpen(false)} className='modal-close'>
             ✕
           </span>
+          {officialVideos && officialVideos.length > 0 ? 
+            <Container>
+            <HomeContainer>
+              <Iframe 
+                src={`https://www.youtube.com/embed/${officialVideos[0].key}?controls=0&autoplay=1&loop=1&mute=1&playlist=${officialVideos[0].key}`}
+                title="YouTube video player"
+                frameBorder="0"
+                allow="autoplay; fullscreen;"
+                >
+              </Iframe>
+            </HomeContainer>
+          </Container> :
           <img 
             className='modal__poster-img'
             src={`https://image.tmdb.org/t/p/original/${backdrop_path}`}
             alt='modal__poster-img'
           />
+          }
           <div className='modal__content'>
             <p className='modal__details'>
               <span className='modal__user-perc'>

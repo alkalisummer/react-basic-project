@@ -1,6 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../../api/axios';
 import "./MiniModal.css";
+import { styled } from 'styled-components';
+
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 400px;
+  height: 230px;
+`;
+const HomeContainer = styled.div`
+  width: 100%;
+  height: 100%;
+`;
+
+const Iframe = styled.iframe`
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  border: none;
+
+  &::after {
+    content:"";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+`;
 
 const runtimeFunc = (time) => {
   let hour = parseInt(time/60);
@@ -9,7 +39,14 @@ const runtimeFunc = (time) => {
   return result;
 }
 
-function MiniModal({ movieId, categoryId, setMiniModalOpen, setModalOpen, setMiniModalMovieId, modalTop, modalLeft}) {
+function MiniModal({ movieId, 
+                     categoryId, 
+                     setMiniModalOpen, 
+                     setBigModalOpen, 
+                     setMiniModalMovieId, 
+                     modalTop, 
+                     modalLeft
+  }) {
   const [movie, setMovie] = useState({});
   const miniModalStyle = {
     top : modalTop,
@@ -32,6 +69,14 @@ function MiniModal({ movieId, categoryId, setMiniModalOpen, setModalOpen, setMin
     const movieDetails = await axios.get(categoryId === 'TV' ? 'tv/'+movieId : 'movie/'+movieId, {
       params: {append_to_response : "videos"}
     });
+    if(movieDetails.data.videos.results.length > 0){
+      movieDetails.data.officialVideos = [];
+      for (let obj of movieDetails.data.videos.results){
+        if(obj.type === 'Teaser' || obj.type === 'Trailer'){
+          movieDetails.data.officialVideos.push(obj);
+        }
+      }
+    }
     setMovie(movieDetails.data);
   };
 
@@ -42,7 +87,7 @@ function MiniModal({ movieId, categoryId, setMiniModalOpen, setModalOpen, setMin
 
   const handleBigModal = () => {
     setMiniModalOpen(false);
-    setModalOpen(movie);
+    setBigModalOpen(movie);
   }
   
   const renderSearchResult = () => {
@@ -54,11 +99,25 @@ function MiniModal({ movieId, categoryId, setMiniModalOpen, setModalOpen, setMin
                                  }} className='mini__modal-close'>
               ✕
             </span>
-            <img 
-              className='mini__modal__poster-img'
-              src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
-              alt='mini__modal__poster-img'
-            />
+            {movie.officialVideos && movie.officialVideos.length > 0 ? 
+              <Container>
+                <HomeContainer>
+                  <Iframe 
+                    src={`https://www.youtube.com/embed/${movie.officialVideos[0].key}?controls=0&autoplay=1&loop=1&mute=1&playlist=${movie.officialVideos[0].key}`}
+                    title="YouTube video player"
+                    frameBorder="0"
+                    allow="autoplay; fullscreen;"
+                    >
+                  </Iframe>
+                </HomeContainer>
+              </Container> : 
+              <img 
+                className='mini__modal__poster-img'
+                src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
+                alt='mini__modal__poster-img'
+              />
+            }
+            
             <div className='mini__modal__content'>
               <p className='mini__modal__details'>
                 <span className='mini__modal__user-perc'>
@@ -75,9 +134,6 @@ function MiniModal({ movieId, categoryId, setMiniModalOpen, setModalOpen, setMin
               <div className='mini__modal_title_div'>
                 <span className='mini__modal__title'>{movie.title? movie.title: movie.name}</span>
               </div>
-              {/* <div className='mini__modal_score_div'>
-                <span className='mini__modal__score'><span className='mini__modal__score-star'>★</span> {movie.vote_average.toFixed(2)}</span>
-              </div> */}
               {movie.genres.map((obj, idx)=>(
                 <span key={obj.id} className='mini__modal__genre'>
                   {obj.name + (idx === (movie.genres.length-1) ? " " : " • ")}

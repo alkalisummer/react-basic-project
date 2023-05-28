@@ -37,9 +37,22 @@ function Row({ isLargeRow, title, id, fetchUrl }) {
   };
 
   const handleClick = async (movie) => {
-    const movieDetails = await axios.get(id === 'TV' ? 'tv/'+movie.id : 'movie/'+movie.id);
+    let movieDetails = {};
+    if(!movie.officialVideos){
+      movieDetails = await axios.get(id === 'TV' ? 'tv/'+movie.id : 'movie/'+movie.id, {
+        params: {append_to_response : "videos"}
+      });
+      if(movieDetails.data.videos.results.length > 0){
+        movieDetails.data.officialVideos = [];
+        for (let obj of movieDetails.data.videos.results){
+          if(obj.type === 'Teaser' || obj.type === 'Trailer'){
+            movieDetails.data.officialVideos.push(obj);
+          }
+        }
+      }
+    }
     setModalOpen(true); 
-    setMovieSelected(movieDetails.data);
+    setMovieSelected(Object.keys(movieDetails).length > 0 ? movieDetails.data : movie);
   };
 
   const handleMouseOver = (movie, overYn, event) => {
@@ -82,7 +95,8 @@ function Row({ isLargeRow, title, id, fetchUrl }) {
             miniModalOpen && <MiniModal movieId={miniModalMovieId} 
                                         setMiniModalOpen={setMiniModalOpen} 
                                         setMiniModalMovieId={setMiniModalMovieId} 
-                                        setModalOpen={handleClick}
+                                        setMovieSelected={setMovieSelected}
+                                        setBigModalOpen={handleClick}
                                         categoryId={id} 
                                         modalTop={modalTop}
                                         modalLeft={modalLeft}

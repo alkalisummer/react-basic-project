@@ -1,35 +1,17 @@
 import React from 'react'
 import "./MovieModal.css";
-import { styled } from 'styled-components';
+import YouTubePlayer  from 'react-youtube';
 
-const Container = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  width: 100%;
-  height: 450px;
-`;
-const HomeContainer = styled.div`
-  width: 100%;
-  height: 100%;
-`;
-
-const Iframe = styled.iframe`
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  border: none;
-
-  &::after {
-    content:"";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+const YouTubeOpts = {
+  width: "100%",
+  height: 600,
+  playerVars : {
+    rel : 0,
+    modestbranding : 1,
+    controls : 0,
+    loop: 1
   }
-`;
+}
 
 const runtimeFunc = (time) => {
   let hour = parseInt(time/60);
@@ -64,17 +46,7 @@ function MovieModal({
             ✕
           </span>
           {officialVideos && officialVideos.length > 0 ? 
-            <Container>
-            <HomeContainer>
-              <Iframe 
-                src={`https://www.youtube.com/embed/${officialVideos[0].key}?controls=0&autoplay=1&loop=1&mute=1&playlist=${officialVideos[0].key}`}
-                title="YouTube video player"
-                frameBorder="0"
-                allow="autoplay; fullscreen;"
-                >
-              </Iframe>
-            </HomeContainer>
-          </Container> :
+            <YouTubePlayer videoId={officialVideos[0].key} opts={YouTubeOpts} onReady={(e) => e.target.playVideo()}></YouTubePlayer> :
           <img 
             className='modal__poster-img'
             src={`https://image.tmdb.org/t/p/original/${backdrop_path}`}

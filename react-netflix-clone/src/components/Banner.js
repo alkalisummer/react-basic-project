@@ -1,45 +1,25 @@
 import React, { useState, useEffect, useContext } from 'react';
 import requests from '../api/requests';
+import YouTubePlayer from 'react-youtube';
 import axios from '../api/axios';
 import { CommonStateContext } from '../App';
 import MovieModal from './MovieModal/MovieModal';
-import "./Banner.css"
-import { styled } from 'styled-components';
+import "./Banner.css";
 
-const Container = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  width: 100%;
-  height: 600px;
-`;
-const HomeContainer = styled.div`
-  width: 100%;
-  height: 100%;
-`;
-
-const Iframe = styled.iframe`
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  opacity:0.65;
-  border: none;
-
-  &::after {
-    content:"";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+const YouTubeOpts = {
+  width: "100%",
+  height: 600,
+  playerVars : {
+    rel : 0,
+    modestbranding : 1,
+    controls : 0,
+    loop: 1
   }
-`;
+}
 
 function Banner() {
   const [movie, setMovie] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
-  const [movieSelected, setMovieSelected] = useState({});
   const { isClicked, setIsClicked } = useContext(CommonStateContext);
   let videosArr = [];
 
@@ -112,19 +92,7 @@ function Banner() {
     )
   } else {
     return(
-      <Container>
-        <HomeContainer>
-          <Iframe 
-            width="640" 
-            height="360" 
-            src={`https://www.youtube.com/embed/${movie.officialVideos[0].key}?controls=0&autoplay=1&loop=1&mute=1&playlist=${movie.officialVideos[0].key}`}
-            title="YouTube video player"
-            frameBorder="0"
-            allow="autoplay; fullscreen;"
-            >
-          </Iframe>
-        </HomeContainer>
-      </Container>
+      <YouTubePlayer videoId={movie.officialVideos[0].key} opts={YouTubeOpts} onReady={(e) => e.target.playVideo()}></YouTubePlayer>
     )
   }
 }

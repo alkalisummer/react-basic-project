@@ -1,36 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import YouTubePlayer  from 'react-youtube';
 import axios from '../../api/axios';
 import "./MiniModal.css";
-import { styled } from 'styled-components';
 
-const Container = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  width: 400px;
-  height: 230px;
-`;
-const HomeContainer = styled.div`
-  width: 100%;
-  height: 100%;
-`;
-
-const Iframe = styled.iframe`
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  border: none;
-
-  &::after {
-    content:"";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+const YouTubeOpts = {
+  width: 400,
+  height: 230,
+  playerVars : {
+    rel : 0,
+    modestbranding : 1,
+    controls : 0
   }
-`;
+}
 
 const runtimeFunc = (time) => {
   let hour = parseInt(time/60);
@@ -47,6 +28,7 @@ function MiniModal({ movieId,
                      modalTop, 
                      modalLeft
   }) {
+
   const [movie, setMovie] = useState({});
   const miniModalStyle = {
     top : modalTop,
@@ -100,17 +82,8 @@ function MiniModal({ movieId,
               ✕
             </span>
             {movie.officialVideos && movie.officialVideos.length > 0 ? 
-              <Container>
-                <HomeContainer>
-                  <Iframe 
-                    src={`https://www.youtube.com/embed/${movie.officialVideos[0].key}?controls=0&autoplay=1&loop=1&showinfo=0&mute=1&playlist=${movie.officialVideos[0].key}`}
-                    title="YouTube video player"
-                    frameBorder="0"
-                    allow="autoplay; fullscreen;"
-                    >
-                  </Iframe>
-                </HomeContainer>
-              </Container> : 
+              <YouTubePlayer videoId={movie.officialVideos[0].key} opts={YouTubeOpts} onReady={(e) => e.target.playVideo()}></YouTubePlayer>
+              : 
               <img 
                 className='mini__modal__poster-img'
                 src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}

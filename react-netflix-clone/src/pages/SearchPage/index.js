@@ -4,6 +4,7 @@ import { useDebounce } from '../../hooks/useDebounce';
 import axios from '../../api/axios';
 import MovieModal from '../../components/MovieModal/MovieModal';
 import MiniModal from '../../components/MovieModal/MiniModal';
+import fetchMovie from '../../api/fetchMovie';
 import "./SearchPage.css"; 
 
 function SearchPage () {
@@ -38,9 +39,12 @@ function SearchPage () {
   }, [debouncedSearchTerm]);
 
   useEffect(()=>{
-    const handler = setTimeout(()=>{
-      if(miniModalMovieId){
+    const handler = setTimeout( async ()=>{
+      if(miniModalMovieId && !modalOpen){
+        const movieDetails = await fetchMovie(miniModalMovieId, categoryId);
+        setMovieSelected(movieDetails.data);
         setMiniModalOpen(miniModalOpenTrigger);
+
       }
     }, 1000);
 
@@ -59,18 +63,7 @@ function SearchPage () {
   }
 
   const handleClick = async (movie) => {
-    const movieDetails = await axios.get(categoryId === 'TV' ? 'tv/'+movie.id : 'movie/'+movie.id, {
-      params: {append_to_response : "videos"}
-    });
-    if(movieDetails.data.videos.results.length > 0){
-      movieDetails.data.officialVideos = [];
-      for (let obj of movieDetails.data.videos.results){
-        if(obj.type === 'Teaser' || obj.type === 'Trailer'){
-          movieDetails.data.officialVideos.push(obj);
-        }
-      }
-    }
-    
+    const movieDetails = await fetchMovie(movie.id, categoryId);
     setModalOpen(true); 
     setMovieSelected(movieDetails.data);
   };
@@ -112,15 +105,16 @@ function SearchPage () {
           modalOpen && <MovieModal {...movieSelected} setModalOpen={setModalOpen}/>
         }
         {
-          miniModalOpen && <MiniModal movieId={miniModalMovieId} 
-                                      setMiniModalOpen={setMiniModalOpen} 
-                                      setMiniModalMovieId={setMiniModalMovieId} 
-                                      setBigModalOpen={handleClick}
-                                      categoryId={categoryId} 
-                                      modalTop={modalTop}
-                                      modalLeft={modalLeft}
-                                      />
-          }
+         miniModalOpen && <MiniModal {...movieSelected}
+                                     miniModalOpen={miniModalOpen}
+                                     setMiniModalOpen={setMiniModalOpen} 
+                                     setMiniModalMovieId={setMiniModalMovieId} 
+                                     setBigModalOpen={handleClick}
+                                     categoryId={categoryId} 
+                                     modalTop={modalTop}
+                                     modalLeft={modalLeft}
+          />
+        }
       </section>
     ) : <section className='no-results'>
           <div className='no-results_text'>
@@ -135,4 +129,4 @@ function SearchPage () {
   return renderSearchResults();
 }
 
-export default SearchPage;
+export default React.memo(SearchPage);

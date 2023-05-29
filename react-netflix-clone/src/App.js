@@ -1,7 +1,6 @@
 import './App.css';
 import Nav from './components/Nav';
 import Footer from './components/Footer';
-import DetailPage from './pages/DetailPage';
 import SearchPage from './pages/SearchPage';
 import MainPage from './pages/MainPage';
 import React, { useState } from 'react';
@@ -30,7 +29,6 @@ function App() {
         <Routes>
           <Route path="/" element={<Layout />} >
             <Route index element={<MainPage/>} />
-            <Route path=":movieId" element={<DetailPage/>} />
             <Route path="search" element={<SearchPage/>} />
           </Route>  
         </Routes>  

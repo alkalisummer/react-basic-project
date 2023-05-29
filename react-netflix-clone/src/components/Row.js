@@ -3,6 +3,7 @@ import axios from '../api/axios';
 import "./Row.css";
 import MovieModal from './MovieModal/MovieModal';
 import MiniModal from './MovieModal/MiniModal';
+import fetchMovie from '../api/fetchMovie';
 
 function Row({ isLargeRow, title, id, fetchUrl }) {
   
@@ -20,8 +21,10 @@ function Row({ isLargeRow, title, id, fetchUrl }) {
   }, []);
 
   useEffect(()=>{
-    const handler = setTimeout(()=>{
-      if(miniModalMovieId){
+    const handler = setTimeout( async ()=>{
+      if(miniModalMovieId && !modalOpen){
+        const movieDetails = await fetchMovie(miniModalMovieId, id);
+        setMovieSelected(movieDetails.data);
         setMiniModalOpen(miniModalOpenTrigger);
       }
     }, 1000);
@@ -37,29 +40,16 @@ function Row({ isLargeRow, title, id, fetchUrl }) {
   };
 
   const handleClick = async (movie) => {
-    let movieDetails = {};
-    if(!movie.officialVideos){
-      movieDetails = await axios.get(id === 'TV' ? 'tv/'+movie.id : 'movie/'+movie.id, {
-        params: {append_to_response : "videos"}
-      });
-      if(movieDetails.data.videos.results.length > 0){
-        movieDetails.data.officialVideos = [];
-        for (let obj of movieDetails.data.videos.results){
-          if(obj.type === 'Teaser' || obj.type === 'Trailer'){
-            movieDetails.data.officialVideos.push(obj);
-          }
-        }
-      }
-    }
+    const movieDetails = await fetchMovie(movie.id, id);
+    setMovieSelected(movieDetails.data);
     setModalOpen(true); 
-    setMovieSelected(Object.keys(movieDetails).length > 0 ? movieDetails.data : movie);
   };
 
   const handleMouseEnter = (movie, overYn, event) => {
-      setMiniModalMovieId(movie.id);
-      setMiniModalOpenTrigger(overYn);
-      setModalTop(event.currentTarget.offsetTop);
-      setModalLeft(event.currentTarget.offsetLeft - document.getElementById(id).scrollLeft);
+    setMiniModalMovieId(movie.id);
+    setMiniModalOpenTrigger(overYn);
+    setModalTop(event.currentTarget.offsetTop);
+    setModalLeft(event.currentTarget.offsetLeft - document.getElementById(id).scrollLeft);
   };
 
   const handleMouseLeave = (overYn) => {
@@ -92,14 +82,15 @@ function Row({ isLargeRow, title, id, fetchUrl }) {
             />
           ))}
           {
-            miniModalOpen && <MiniModal movieId={miniModalMovieId} 
+            miniModalOpen && <MiniModal {...movieSelected}
+                                        miniModalOpen={miniModalOpen}
                                         setMiniModalOpen={setMiniModalOpen} 
                                         setMiniModalMovieId={setMiniModalMovieId} 
                                         setBigModalOpen={handleClick}
                                         categoryId={id} 
                                         modalTop={modalTop}
                                         modalLeft={modalLeft}
-                                        />
+            />
           }
         </div>
         <div className="slider__arrow-right" 

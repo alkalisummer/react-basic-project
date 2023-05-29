@@ -1,6 +1,6 @@
 import React from 'react'
 import "./MovieModal.css";
-import YouTubePlayer  from 'react-youtube';
+import YouTube  from 'react-youtube';
 
 const YouTubeOpts = {
   width: "100%",
@@ -46,7 +46,7 @@ function MovieModal({
             ✕
           </span>
           {officialVideos && officialVideos.length > 0 ? 
-            <YouTubePlayer videoId={officialVideos[0].key} opts={YouTubeOpts} onReady={(e) => e.target.playVideo()}></YouTubePlayer> :
+            <YouTube videoId={officialVideos[0].key} opts={YouTubeOpts} onReady={(e) => e.target.playVideo()}></YouTube> :
           <img 
             className='modal__poster-img'
             src={`https://image.tmdb.org/t/p/original/${backdrop_path}`}
@@ -81,4 +81,4 @@ function MovieModal({
   )
 }
 
-export default MovieModal;
+export default React.memo(MovieModal);

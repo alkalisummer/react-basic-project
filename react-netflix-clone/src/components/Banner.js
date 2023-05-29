@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import requests from '../api/requests';
-import YouTubePlayer from 'react-youtube';
+import YouTube from 'react-youtube';
 import axios from '../api/axios';
 import { CommonStateContext } from '../App';
 import MovieModal from './MovieModal/MovieModal';
@@ -92,9 +92,9 @@ function Banner() {
     )
   } else {
     return(
-      <YouTubePlayer videoId={movie.officialVideos[0].key} opts={YouTubeOpts} onReady={(e) => e.target.playVideo()}></YouTubePlayer>
+      <YouTube videoId={movie.officialVideos[0].key} opts={YouTubeOpts} onReady={(e) => e.target.playVideo()}></YouTube>
     )
   }
 }
 
-export default Banner;
+export default React.memo(Banner);

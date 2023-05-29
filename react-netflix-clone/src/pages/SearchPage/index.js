@@ -3,12 +3,23 @@ import { useLocation } from 'react-router-dom';
 import { useDebounce } from '../../hooks/useDebounce';
 import axios from '../../api/axios';
 import MovieModal from '../../components/MovieModal/MovieModal';
+import MiniModal from '../../components/MovieModal/MiniModal';
 import "./SearchPage.css"; 
 
 function SearchPage () {
   const [searchResults, setSearchResults] = useState([]);
-  const [modalOpen, setModalOpen] = useState(false);
   const [movieSelected, setMovieSelected] = useState({});
+  
+  //BigModal state
+  const [modalOpen, setModalOpen] = useState(false);
+
+  //MiniModal state
+  const [miniModalOpen, setMiniModalOpen] = useState(false);
+  const [miniModalOpenTrigger, setMiniModalOpenTrigger] = useState(false);
+  const [miniModalMovieId, setMiniModalMovieId] = useState("");
+  const [categoryId, setCategoryId] = useState("");
+  const [modalTop, setModalTop] = useState(0);
+  const [modalLeft, setModalLeft] = useState(0);
 
   const useQuery = () => {
     return new URLSearchParams(useLocation().search);  
@@ -24,7 +35,19 @@ function SearchPage () {
     if(debouncedSearchTerm) {
         fetchSearchMovie(debouncedSearchTerm);
     }
-  }, [debouncedSearchTerm])
+  }, [debouncedSearchTerm]);
+
+  useEffect(()=>{
+    const handler = setTimeout(()=>{
+      if(miniModalMovieId){
+        setMiniModalOpen(miniModalOpenTrigger);
+      }
+    }, 1000);
+
+    return () => {
+      clearTimeout(handler);
+    }
+  }, [miniModalOpenTrigger, miniModalMovieId])
   
   const fetchSearchMovie = async (searchTerm) => {
     try{
@@ -36,7 +59,7 @@ function SearchPage () {
   }
 
   const handleClick = async (movie) => {
-    const movieDetails = await axios.get(movie.media_type === 'tv' ? 'tv/'+movie.id : 'movie/'+movie.id, {
+    const movieDetails = await axios.get(categoryId === 'tv' ? 'tv/'+movie.id : 'movie/'+movie.id, {
       params: {append_to_response : "videos"}
     });
     if(movieDetails.data.videos.results.length > 0){
@@ -48,22 +71,37 @@ function SearchPage () {
       }
     }
     
-    if(movieDetails){
-      movieDetails.data.categoryId = movie.media_type.toUpperCase();
-    }
     setModalOpen(true); 
     setMovieSelected(movieDetails.data);
   };
+
+  const handleMouseEnter = (movie, overYn, event) => {
+    setMiniModalMovieId(movie.id);
+    setCategoryId(movie.media_type.toUpperCase())
+    setMiniModalOpenTrigger(overYn);
+    setModalTop(event.currentTarget.offsetTop);
+    setModalLeft(event.currentTarget.offsetLeft);
+  };
+
+  const handleMouseLeave = (overYn) => {
+    if(!miniModalOpen){
+      setMiniModalOpenTrigger(overYn);
+    }
+  }
 
   const renderSearchResults = () => {
     return searchResults.length > 0 ? ( 
       <section className='search-container'>
         {searchResults.map((obj)=>{
           if(obj.backdrop_path !== null && obj.media_type !== 'person'){
-            const movieImageUrl = 'https://image.tmdb.org/t/p/w500' + obj.backdrop_path
+            const movieImageUrl = 'https://image.tmdb.org/t/p/w400' + obj.backdrop_path
             return (
               <div className='movie' key={obj.id} >
-                <div className='movie__column-poster' onClick={()=>handleClick(obj)}>
+                <div className='movie__column-poster' 
+                     onClick={()=>handleClick(obj)}
+                     onMouseEnter={(e) => handleMouseEnter(obj, true, e)}
+                     onMouseLeave={() => handleMouseLeave(false)}
+                     >
                   <img src={movieImageUrl} alt='movie' className='movie__poster'/>
                 </div>
               </div>
@@ -73,6 +111,16 @@ function SearchPage () {
         {
           modalOpen && <MovieModal {...movieSelected} setModalOpen={setModalOpen}/>
         }
+        {
+          miniModalOpen && <MiniModal movieId={miniModalMovieId} 
+                                      setMiniModalOpen={setMiniModalOpen} 
+                                      setMiniModalMovieId={setMiniModalMovieId} 
+                                      setBigModalOpen={handleClick}
+                                      categoryId={categoryId} 
+                                      modalTop={modalTop}
+                                      modalLeft={modalLeft}
+                                      />
+          }
       </section>
     ) : <section className='no-results'>
           <div className='no-results_text'>

@@ -78,10 +78,8 @@ function Banner() {
     
   };
 
-  const handleClick = async (movie) => {
-    const movieDetails = await axios.get('movie/'+movie.id);
+  const handleClick = () => {
     setModalOpen(true); 
-    setMovieSelected(movieDetails.data);
   };
 
   const truncate = (str, n) => {
@@ -108,7 +106,7 @@ function Banner() {
         </div>
         <div className="banner--fadeBottom"></div>
         {
-          modalOpen && <MovieModal {...movieSelected} setModalOpen={setModalOpen}/>
+          modalOpen && <MovieModal {...movie} setModalOpen={setModalOpen}/>
         }
       </header>
     )

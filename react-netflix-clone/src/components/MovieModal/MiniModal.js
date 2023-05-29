@@ -103,7 +103,7 @@ function MiniModal({ movieId,
               <Container>
                 <HomeContainer>
                   <Iframe 
-                    src={`https://www.youtube.com/embed/${movie.officialVideos[0].key}?controls=0&autoplay=1&loop=1&mute=1&playlist=${movie.officialVideos[0].key}`}
+                    src={`https://www.youtube.com/embed/${movie.officialVideos[0].key}?controls=0&autoplay=1&loop=1&showinfo=0&mute=1&playlist=${movie.officialVideos[0].key}`}
                     title="YouTube video player"
                     frameBorder="0"
                     allow="autoplay; fullscreen;"

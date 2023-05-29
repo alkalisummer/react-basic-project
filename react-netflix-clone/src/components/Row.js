@@ -55,14 +55,14 @@ function Row({ isLargeRow, title, id, fetchUrl }) {
     setMovieSelected(Object.keys(movieDetails).length > 0 ? movieDetails.data : movie);
   };
 
-  const handleMouseOver = (movie, overYn, event) => {
+  const handleMouseEnter = (movie, overYn, event) => {
       setMiniModalMovieId(movie.id);
       setMiniModalOpenTrigger(overYn);
       setModalTop(event.currentTarget.offsetTop);
       setModalLeft(event.currentTarget.offsetLeft - document.getElementById(id).scrollLeft);
   };
 
-  const handleMouseOut = (overYn) => {
+  const handleMouseLeave = (overYn) => {
     if(!miniModalOpen){
       setMiniModalOpenTrigger(overYn);
     }
@@ -87,15 +87,14 @@ function Row({ isLargeRow, title, id, fetchUrl }) {
               src={`https://image.tmdb.org/t/p/original/${isLargeRow ? obj.poster_path : obj.backdrop_path}`}
               alt={obj.name}
               onClick={()=> handleClick(obj)}
-              onMouseOver={(e) => handleMouseOver(obj, true, e)}
-              onMouseLeave={() => handleMouseOut(false)}
+              onMouseEnter={(e) => handleMouseEnter(obj, true, e)}
+              onMouseLeave={() => handleMouseLeave(false)}
             />
           ))}
           {
             miniModalOpen && <MiniModal movieId={miniModalMovieId} 
                                         setMiniModalOpen={setMiniModalOpen} 
                                         setMiniModalMovieId={setMiniModalMovieId} 
-                                        setMovieSelected={setMovieSelected}
                                         setBigModalOpen={handleClick}
                                         categoryId={id} 
                                         modalTop={modalTop}

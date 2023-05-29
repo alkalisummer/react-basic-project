@@ -59,7 +59,7 @@ function SearchPage () {
   }
 
   const handleClick = async (movie) => {
-    const movieDetails = await axios.get(categoryId === 'tv' ? 'tv/'+movie.id : 'movie/'+movie.id, {
+    const movieDetails = await axios.get(categoryId === 'TV' ? 'tv/'+movie.id : 'movie/'+movie.id, {
       params: {append_to_response : "videos"}
     });
     if(movieDetails.data.videos.results.length > 0){

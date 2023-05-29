@@ -4,7 +4,7 @@ import YouTubePlayer  from 'react-youtube';
 
 const YouTubeOpts = {
   width: "100%",
-  height: 600,
+  height: 450,
   playerVars : {
     rel : 0,
     modestbranding : 1,

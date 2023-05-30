@@ -4,7 +4,6 @@ function useOnClickOutside(ref, handler) {
 
   useEffect(() => {
     const listener = (event) => {
-      debugger;
       if(!ref.current || ref.current.contains(event.target)) {
         return;  
       }

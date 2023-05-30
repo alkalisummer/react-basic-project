@@ -5,6 +5,13 @@ import MovieModal from './MovieModal/MovieModal';
 import MiniModal from './MovieModal/MiniModal';
 import fetchMovie from '../api/fetchMovie';
 
+//Import Swiper React Components & Swiper CSS
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { A11y, Navigation } from 'swiper';
+import 'swiper/css';
+import 'swiper/css/navigation';
+
+
 function Row({ isLargeRow, title, id, fetchUrl }) {
   
   const [movies, setMovies] = useState([]);
@@ -15,6 +22,7 @@ function Row({ isLargeRow, title, id, fetchUrl }) {
   const [miniModalMovieId, setMiniModalMovieId] = useState("");
   const [modalTop, setModalTop] = useState(0);
   const [modalLeft, setModalLeft] = useState(0);
+  const [swiperTrans, setSwiperTrans] = useState(0);
 
   useEffect(()=>{
     fetchMovieData();
@@ -48,8 +56,8 @@ function Row({ isLargeRow, title, id, fetchUrl }) {
   const handleMouseEnter = (movie, overYn, event) => {
     setMiniModalMovieId(movie.id);
     setMiniModalOpenTrigger(overYn);
-    setModalTop(event.currentTarget.offsetTop);
-    setModalLeft(event.currentTarget.offsetLeft - document.getElementById(id).scrollLeft);
+    setModalTop(event.target.offsetParent.offsetParent.offsetParent.offsetTop);
+    setModalLeft(event.target.offsetParent.offsetLeft - Math.abs(swiperTrans));
   };
 
   const handleMouseLeave = (overYn) => {
@@ -61,49 +69,64 @@ function Row({ isLargeRow, title, id, fetchUrl }) {
   return (
     <section className="row">
       <h2>{title}</h2>
-      <div className="slider">
-        <div className="slider__arrow-left" 
-             onClick={() => {
-               document.getElementById(id).scrollLeft -= window.innerWidth - 80;
-             }}>
-          <span className="arrow">{"<"}</span>
-        </div>
+      <Swiper
+        id = {id}
+        spaceBetween={7}
+        modules={[A11y, Navigation]}
+        navigation
+        loop={true}
+        breakpoints={{
+          1378: {
+            slidesPerView: 6,
+            slidesPerGroup: 6,
+          },
+          998: {
+            slidesPerView: 5,
+            slidesPerGroup: 5
+          },
+          625: {
+            slidesPerView: 4,
+            slidesPerGroup: 4
+          },
+          0: {
+            slidesPerView: 3,
+            slidesPerGroup: 3
+          },
+        }}
+        onSlideChange={(swiper) => {
+          setSwiperTrans(Math.round(swiper.translate));
+        }}
+      >
         <div id={id} className="row__posters">
           {movies.map(obj=>(
-            <img 
-              key = {obj.id}
-              id = {obj.id}
-              className={`row__poster ${isLargeRow && "row__posterLarge"}`}
-              src={`https://image.tmdb.org/t/p/original/${isLargeRow ? obj.poster_path : obj.backdrop_path}`}
-              alt={obj.name}
-              onClick={()=> handleClick(obj)}
-              onMouseEnter={(e) => handleMouseEnter(obj, true, e)}
-              onMouseLeave={() => handleMouseLeave(false)}
-            />
+            <SwiperSlide key = {obj.id}>
+              <img 
+                id = {obj.id}
+                className={`row__poster ${isLargeRow && "row__posterLarge"}`}
+                src={`https://image.tmdb.org/t/p/original/${isLargeRow ? obj.poster_path : obj.backdrop_path}`}
+                alt={obj.name}
+                onClick={()=> handleClick(obj)}
+                onMouseEnter={(e) => handleMouseEnter(obj, true, e)}
+                onMouseLeave={() => handleMouseLeave(false)}
+              />
+            </SwiperSlide>
           ))}
-          {
-            miniModalOpen && <MiniModal {...movieSelected}
-                                        miniModalOpen={miniModalOpen}
-                                        setMiniModalOpen={setMiniModalOpen} 
-                                        setMiniModalMovieId={setMiniModalMovieId} 
-                                        setBigModalOpen={handleClick}
-                                        categoryId={id} 
-                                        modalTop={modalTop}
-                                        modalLeft={modalLeft}
-            />
-          }
         </div>
-        <div className="slider__arrow-right" 
-             onClick={() => {
-               document.getElementById(id).scrollLeft += window.innerWidth - 80;
-             }}>
-          <span className="arrow">{">"}</span>
-        </div>
-      </div>
-      {
-        modalOpen && <MovieModal {...movieSelected} setModalOpen={setModalOpen} categoryId={id}/>
-      }
-
+      </Swiper>
+        {
+          miniModalOpen && <MiniModal {...movieSelected}
+                                      miniModalOpen={miniModalOpen}
+                                      setMiniModalOpen={setMiniModalOpen} 
+                                      setMiniModalMovieId={setMiniModalMovieId} 
+                                      setBigModalOpen={handleClick}
+                                      categoryId={id} 
+                                      modalTop={modalTop}
+                                      modalLeft={modalLeft}
+          />
+        }
+        {
+          modalOpen && <MovieModal {...movieSelected} setModalOpen={setModalOpen} categoryId={id}/>
+        }
     </section>
   )
 }

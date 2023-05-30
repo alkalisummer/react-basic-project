@@ -1,6 +1,7 @@
-import React from 'react'
 import "./MovieModal.css";
+import React, { useRef } from 'react'
 import YouTube  from 'react-youtube';
+import useOnClickOutside from '../../hooks/useOnClickOutside';
 
 const YouTubeOpts = {
   width: "100%",
@@ -37,11 +38,13 @@ function MovieModal({
   officialVideos,
   setModalOpen
 }) {
-    
+  const ref = useRef();
+  useOnClickOutside(ref, () => {setModalOpen(false)})
+
   return (
     <div className='presentation'>
       <div className='wrapper-modal'>
-        <div className='modal'>
+        <div className='modal' ref={ref}>
           <span onClick={()=> setModalOpen(false)} className='modal-close'>
             ✕
           </span>

@@ -94,16 +94,25 @@
   }
   @media screen and (max-width: 768px) {
     .modal__overview {
-      font-size: 16px;
+      font-size: 15px;
     }
     .modal__details {
-      font-size: 16px;
+      font-size: 12px;
     }
     .wrapper-modal {
       padding: 0;
     }
     .modal {
       overflow-y: scroll !important;
+    }
+    .modal__title {
+      font-size: 25px;
+    }
+    .modal__score {
+      font-size: 15px;
+    }
+    .modal__genre {
+      font-size: 15px;
     }
   }
   @keyframes fadeIn {

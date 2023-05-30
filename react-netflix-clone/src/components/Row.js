@@ -51,13 +51,14 @@ function Row({ isLargeRow, title, id, fetchUrl }) {
     const movieDetails = await fetchMovie(movie.id, id);
     setMovieSelected(movieDetails.data);
     setModalOpen(true); 
+    setMiniModalOpenTrigger(false);
   };
 
   const handleMouseEnter = (movie, overYn, event) => {
-    setMiniModalMovieId(movie.id);
-    setMiniModalOpenTrigger(overYn);
-    setModalTop(event.target.offsetParent.offsetParent.offsetParent.offsetTop);
-    setModalLeft(event.target.offsetParent.offsetLeft - Math.abs(swiperTrans));
+      setMiniModalMovieId(movie.id);
+      setMiniModalOpenTrigger(overYn);
+      setModalTop(event.target.offsetParent.offsetParent.offsetParent.offsetTop);
+      setModalLeft(event.target.offsetParent.offsetLeft - Math.abs(swiperTrans));
   };
 
   const handleMouseLeave = (overYn) => {

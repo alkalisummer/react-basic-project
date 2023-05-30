@@ -66,6 +66,7 @@ function SearchPage () {
     const movieDetails = await fetchMovie(movie.id, categoryId);
     setModalOpen(true); 
     setMovieSelected(movieDetails.data);
+    setMiniModalOpenTrigger(false);
   };
 
   const handleMouseEnter = (movie, overYn, event) => {

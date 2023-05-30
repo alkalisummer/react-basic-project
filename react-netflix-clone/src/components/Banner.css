@@ -17,7 +17,7 @@
   }
   @media (max-width: 768px) {
     .banner__contents {
-      width: min-content !important;
+      width: fit-content !important;
       padding-left: 2.3rem;
       margin-left: 0px !important;
     }
@@ -35,6 +35,9 @@
     .banner__button {
       font-size: 0.8rem !important;
       border-radius: 4px !important;
+    }
+    .banner__title {
+      font-size: 2rem !important;
     }
   }
   .banner__contents {

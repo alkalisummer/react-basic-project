@@ -57,7 +57,7 @@ function Row({ isLargeRow, title, id, fetchUrl }) {
     setMiniModalMovieId(movie.id);
     setMiniModalOpenTrigger(overYn);
     setModalTop(event.target.offsetParent.offsetParent.offsetParent.offsetTop);
-    setModalLeft(event.target.offsetParent.offsetLeft - Math.abs(swiperTrans)+39.5);
+    setModalLeft(event.target.offsetParent.offsetLeft - Math.abs(swiperTrans));
   };
 
   const handleMouseLeave = (overYn) => {

@@ -139,5 +139,10 @@
     font-weight: 600 !important;
   }
 
+  .swiper {
+    z-index: unset !important;
+    position: sticky !important;
+  }
+
   
 
